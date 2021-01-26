@@ -31,6 +31,7 @@ int main(void)
     }
 
     string s = Fracts::convertFrac(fractions);
+    cout << "The result is \"" << s << "\"." << endl;
     
     return 0;
 }

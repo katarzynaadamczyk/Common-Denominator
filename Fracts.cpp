@@ -9,26 +9,13 @@ using namespace std;
 
 string Fracts::convertFrac(vector<std::vector<unsigned long long>> &lst)
 {
-    /* TO DO */
-    vector<vector<unsigned long long>> totalDivs;
+    vector<vector<unsigned long long>> totalDivs, divs;
+    string ret;
+    unsigned long long comDenom, mult;
     for (int i = 0; i < lst.size(); i++)
     {
-        /* for now there is only cheching if algorithm works well */
-        vector<vector<unsigned long long>> divs = firstDiv(lst[i][1]);
-        cout << endl;
-        cout << "DZIELNIKI LICZBY " << lst[i][1] << endl; 
-        for (int j = 0; j < divs.size(); j++)
-        {
-            cout << "dzielnik nr " << j + 1 << ": " << divs[j][0] <<", ilosc powtorzen: " << divs[j][1] << endl;
-        }
-        cout << "SKROCENIE ULAMKA " << lst[i][0] <<" // " << lst[i][1] << endl;
+        divs = firstDiv(lst[i][1]);
         shortenFract(divs, lst[i]);
-        cout << "ULAMEK PO SKROCENIU: " << lst[i][0] <<" // " << lst[i][1] << endl;
-        cout << "DZIELNIKI LICZBY " << lst[i][1] << endl; 
-        for (int j = 0; j < divs.size(); j++)
-        {
-            cout << "dzielnik nr " << j + 1 << ": " << divs[j][0] <<", ilosc powtorzen: " << divs[j][1] << endl;
-        }
         if (totalDivs.empty())
         {
             totalDivs = divs;
@@ -37,15 +24,20 @@ string Fracts::convertFrac(vector<std::vector<unsigned long long>> &lst)
         {
             nonCommonDivisors(totalDivs, divs);
         }
-        cout << endl;
-        cout << "WSPOLNE DZIELNIKI:" << endl; 
-        for (int j = 0; j < totalDivs.size(); j++)
-        {
-            cout << "dzielnik nr " << j + 1 << ": " << totalDivs[j][0] <<", ilosc powtorzen: " << totalDivs[j][1] << endl;
-        }  
-        /* TO DO */
+        divs.clear();
     }
-    return "";
+    comDenom = commonDenom(totalDivs);
+    for (int j = 0; j < lst.size(); j++)
+    {
+        ret += "(";
+        mult = comDenom / lst[j][1]; 
+        lst[j][0] *= mult;
+        ret += to_string(lst[j][0]) + ",";
+        lst[j][1] = comDenom;
+        ret += to_string(lst[j][1]) + ")";
+    }
+
+    return ret;
 }
 
 //*************************************************************************************
@@ -111,24 +103,27 @@ vector<vector<unsigned long long>> Fracts::nonCommonDivisors(vector<vector<unsig
     {
         while (j < divs.size())
         {
-            if (divs[j][0] <= divnew[i][0])
+            if (divs[j][0] >= divnew[i][0])
             {
                 break;
             }
             j++;
         }
-        cout << "j: " << j << ", i: " << i << endl;
-            if (divnew[i][0] == divs[j][0])
+        if (j >= divs.size())
+        {
+            divs.push_back(divnew[i]);
+        }
+        else if (divnew[i][0] == divs[j][0])
+        {
+            if (divnew[i][1] > divs[j][1]) 
             {
-                if (divnew[i][1] > divs[j][1]) 
-                {
-                    divs[j][1] = divnew[i][1];  
-                }          
-            }
-            else
-            {
-                divs.insert(divs.begin() + j, divnew[i]);
-            }
+                divs[j][1] = divnew[i][1];  
+            }          
+        }
+        else
+        {
+            divs.insert(divs.begin() + j, divnew[i]);
+        }
     }
     return divs;
 }
