@@ -9,33 +9,13 @@ using namespace std;
 
 string Fracts::convertFrac(vector<std::vector<unsigned long long>> &lst)
 {
-    /* TO DO */
     vector<vector<unsigned long long>> totalDivs, divs;
     string ret;
     unsigned long long comDenom, mult;
     for (int i = 0; i < lst.size(); i++)
     {
-        /* for now there is only cheching if algorithm works well */
         divs = firstDiv(lst[i][1]);
-        
-        /*
-        cout << endl;
-        cout << "DZIELNIKI LICZBY " << lst[i][1] << endl; 
-        for (int j = 0; j < divs.size(); j++)
-        {
-            cout << "dzielnik nr " << j + 1 << ": " << divs[j][0] <<", ilosc powtorzen: " << divs[j][1] << endl;
-        }
-        cout << "SKROCENIE ULAMKA " << lst[i][0] <<" // " << lst[i][1] << endl;
-        */
         shortenFract(divs, lst[i]);
-        /*
-        cout << "ULAMEK PO SKROCENIU: " << lst[i][0] <<" // " << lst[i][1] << endl;
-        cout << "DZIELNIKI LICZBY " << lst[i][1] << endl; 
-        for (int j = 0; j < divs.size(); j++)
-        {
-            cout << "dzielnik nr " << j + 1 << ": " << divs[j][0] <<", ilosc powtorzen: " << divs[j][1] << endl;
-        }
-        */
         if (totalDivs.empty())
         {
             totalDivs = divs;
@@ -44,28 +24,9 @@ string Fracts::convertFrac(vector<std::vector<unsigned long long>> &lst)
         {
             nonCommonDivisors(totalDivs, divs);
         }
-
-        /*
-        cout << endl;
-        cout << "WSPOLNE DZIELNIKI:" << endl; 
-        for (int j = 0; j < totalDivs.size(); j++)
-        {
-            cout << "dzielnik nr " << j + 1 << ": " << totalDivs[j][0] << ", ilosc powtorzen: " << totalDivs[j][1] << endl;
-        }
-        cout << endl;
-        */
-        comDenom = commonDenom(totalDivs);
-        //cout << "WSPOLNY MIANOWNIK: " << comDenom << endl;
-        
-        
-        //"(6,12)(4,12)(3,12)";
-
-        /* TO DO */
-
-
         divs.clear();
-        
     }
+    comDenom = commonDenom(totalDivs);
     for (int j = 0; j < lst.size(); j++)
     {
         ret += "(";
